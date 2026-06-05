@@ -30,6 +30,7 @@ type CourseDownload struct {
 	AID          int
 	IsMerge      bool
 	IsComment    bool
+	CommentCount int
 	IsOrder      bool
 	ClassName    string
 }
@@ -863,7 +864,7 @@ func DownloadMarkdownCourse(d *CourseDownload, course *services.CourseInfo, path
 		res := ContentsToMarkdown(content)
 		if d.IsComment {
 			// 添加留言
-			commentList, err := ArticleCommentList(v.Enid, "like", 1, 20)
+			commentList, err := ArticleCommentList(v.Enid, "like", 1, d.CommentCount)
 			if err == nil {
 				res += articleCommentsToMarkdown(commentList.List)
 			}
@@ -959,7 +960,7 @@ func DownloadPdfCourse(d *CourseDownload, course *services.CourseInfo, path stri
 		res := ContentsToMarkdown(content)
 		if d.IsComment {
 			// 添加留言
-			commentList, err := ArticleCommentList(v.Enid, "like", 1, 20)
+			commentList, err := ArticleCommentList(v.Enid, "like", 1, d.CommentCount)
 			if err == nil {
 				res += articleCommentsToMarkdown(commentList.List)
 			}
