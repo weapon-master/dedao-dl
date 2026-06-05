@@ -57,7 +57,7 @@ func ContentsToHTML(contents []services.Content) string {
 			if content.Legend != "" {
 				sb.WriteString(fmt.Sprintf(" alt=\"%s\"", content.Legend))
 			}
-			sb.WriteString(">\n")
+			sb.WriteString("/>\n")
 		case "label-group":
 			sb.WriteString(fmt.Sprintf("<h2><code>%s</code></h2>\n", content.Text))
 		}
