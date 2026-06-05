@@ -240,6 +240,13 @@ func addArticleToBook(book *epub.Epub, d *CourseDownload, article *services.Arti
 	htmlContent := ContentsToHTML(content)
 	htmlContent = replaceImageSources(htmlContent, imageDir, book)
 
+	if d.IsComment {
+		commentList, err := ArticleCommentList(article.Enid, "like", 1, d.CommentCount)
+		if err == nil && len(commentList.List) > 0 {
+			htmlContent += articleCommentsToHTML(commentList.List)
+		}
+	}
+
 	if asSubSection {
 		_, err = book.AddSubSection(parentFilename, htmlContent, articleName, fmt.Sprintf("article_%d", article.ID), "")
 	} else {
@@ -319,4 +326,17 @@ func replaceImageSources(htmlContent string, imageDir string, book *epub.Epub) s
 	}
 
 	return htmlContent
+}
+
+func articleCommentsToHTML(contents []services.ArticleComment) string {
+	var sb strings.Builder
+	sb.WriteString("<h2>热门留言</h2>\n")
+	for _, content := range contents {
+		sb.WriteString(fmt.Sprintf("<p><strong>%s</strong>：%s</p>\n", content.NotesOwner.Name, content.Note))
+		if content.CommentReply != "" {
+			sb.WriteString(fmt.Sprintf("<blockquote><p>%s(%s) 回复：%s</p></blockquote>\n", content.CommentReplyUser.Name, content.CommentReplyUser.Role, content.CommentReply))
+		}
+	}
+	sb.WriteString("<hr/>\n")
+	return sb.String()
 }
