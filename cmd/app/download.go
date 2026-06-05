@@ -126,6 +126,16 @@ func (d *CourseDownload) Download() error {
 		if err := DownloadMarkdownCourse(d, course, path); err != nil {
 			return err
 		}
+	case 4:
+		// 下载 EPUB
+		path, err := utils.Mkdir(OutputDir, utils.FileName(course.ClassInfo.Name, ""), "EPUB")
+		if err != nil {
+			return err
+		}
+		d.ClassName = course.ClassInfo.Name
+		if err := DownloadEpubCourse(d, course, path); err != nil {
+			return err
+		}
 	}
 	return nil
 

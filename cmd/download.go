@@ -13,8 +13,8 @@ var downloadType, courseMerge, courseComment, courseOrder = 1, false, false, fal
 var downloadCmd = &cobra.Command{
 	Use:   "dl",
 	Short: "下载已购买课程，并转换成 PDF & 音频",
-	Long: `使用 dedao-dl dl 下载已购买课程, 并转换成 PDF & 音频 & markdown
--t 指定下载格式, 1:mp3, 2:PDF文档, 3:markdown文档, 默认 mp3
+	Long: `使用 dedao-dl dl 下载已购买课程, 并转换成 PDF & 音频 & markdown & epub
+-t 指定下载格式, 1:mp3, 2:PDF文档, 3:markdown文档, 4:epub文档, 默认 mp3
 -m 是否合并课程文稿(仅支持markdown), 默认不合并
 -c 是否下载课程热门留言(仅支持markdown), 默认不下载
 参数支持:
@@ -147,7 +147,7 @@ func init() {
 	rootCmd.AddCommand(downloadCmd)
 	rootCmd.AddCommand(dlOdobCmd)
 	rootCmd.AddCommand(dlEbookCmd)
-	downloadCmd.PersistentFlags().IntVarP(&downloadType, "downloadType", "t", 1, "下载格式, 1:mp3, 2:PDF文档, 3:markdown文档")
+	downloadCmd.PersistentFlags().IntVarP(&downloadType, "downloadType", "t", 1, "下载格式, 1:mp3, 2:PDF文档, 3:markdown文档, 4:epub文档")
 	downloadCmd.PersistentFlags().BoolVarP(&courseMerge, "merge", "m", false, "是否合并课程章节")
 	downloadCmd.PersistentFlags().BoolVarP(&courseComment, "comment", "c", false, "是否下载课程热门留言, 仅针对 markdown 文档")
 	downloadCmd.PersistentFlags().BoolVarP(&courseOrder, "order", "o", false, "是否按顺序展示, 如果为true, 则文件名前缀会加上序号, 如 00x.")
