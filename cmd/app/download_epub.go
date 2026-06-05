@@ -140,7 +140,6 @@ func DownloadEpubCourse(d *CourseDownload, course *services.CourseInfo, path str
 		if imgErr == nil {
 			book.SetCover(cover, "")
 		}
-		os.Remove(coverPath)
 	}
 
 	imageDir, err := utils.Mkdir(OutputDir, utils.FileName(title, ""), "EPUB", "images")
@@ -212,6 +211,10 @@ func DownloadEpubCourse(d *CourseDownload, course *services.CourseInfo, path str
 		return err
 	}
 	fmt.Printf("\033[32;1m完成\033[0m\n")
+
+	if coverPath != "" {
+		os.Remove(coverPath)
+	}
 	return nil
 }
 
