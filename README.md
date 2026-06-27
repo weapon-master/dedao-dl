@@ -22,6 +22,7 @@
 * 可查看已购买的锦囊
 * 可查看知识城邦推荐话题精选内容
 * 课程可生成PDF，文稿生成 Markdown 文档，也可生成 mp3 文件
+* 课程可下载为 epub 电子书（含封面、章节结构、文章配图，可选附热门留言）
 * 每天听本书可下载音频，文稿生成 pdf、Markdown 文档
 * 电子书可下载 html, pdf, epub
 * 电子书读书笔记可导出为 markdown
@@ -111,7 +112,7 @@ Available Commands:
   cat         获取课程分类
   channel     学习圈相关操作
   course      获取我购买过课程
-  dl          下载已购买课程，并转换成 PDF & 音频
+  dl          下载已购买课程，并转换成 PDF & 音频 & Markdown & EPUB
   dle         下载电子书
   dlo         下载每天听本书音频 & 文稿
   ebook       获取我的电子书架
@@ -268,14 +269,23 @@ dedao-dl --json recent
 +----+-------+----------------------------------------------------------+---------------------+----------+
 ```
 
-`dedao-dl dl 123 -t 1 -m -c -o` 下载课程ID 123 的所有课程
+`dedao-dl dl 123 -t 1 -m -c 5 -o` 下载课程ID 123 的所有课程
 
-* -t 下载格式, 1:mp3, 2:PDF文档, 3:markdown文档 (default 1)
+* -t 下载格式, 1:mp3, 2:PDF文档, 3:markdown文档, 4:epub文档 (default 1)
 * -m 是否合并课程内容（针对markdown文档），默认不合并
-* -c 是否下载热门留言（针对markdown文档），默认不下载
+* -c 下载课程热门留言条数（针对markdown和epub文档），默认 `0` 表示不下载
 * -o 是否按顺序展示, 如果为true, 则文件名前缀会加上序号, 如 `00x.`
 
 注意：生成 PDF 的时候，操作过于频繁会触发 `496 NoCertificate` , 因此每次生成一次PDF sleep 0~5秒, 尽管如此，还是有极大可能触发操作频繁图形验证。
+
+`dedao-dl dl 123 -t 4` 下载课程ID 123 为 EPUB 电子书：
+
+* 封面使用课程封面图片
+* 目录按"模块 → 文章"两层结构组织；无模块课程的文章直接作为顶层章节
+* 文章中的图片会下载到 `output/<课程名>/EPUB/images/` 并嵌入到 EPUB
+* 通过 `-c N` 可在每篇文章末尾追加 N 条热门留言
+* 输出文件：`output/<课程名>/EPUB/<课程名>.epub`
+* 支持参数 `-o` 给文件/章节名加序号；`-m` 对 EPUB 无意义（EPUB 本身即为合集）
 
 `dedao-dl dle 123 -t 1` 下载电子书，先通过 `dedao-dl ebook` 获取要下载的电子书 id,  下载格式, 1:html, 2:PDF文档, 3:epub (default 1)
 
